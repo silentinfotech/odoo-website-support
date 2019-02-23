@@ -8,4 +8,8 @@
 
 .support-help-page {
   font-size: 24px;
+} 
+.o_brand_promotion,
+.mk_brand_promotion {
+  display: none;
 }

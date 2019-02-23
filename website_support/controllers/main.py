@@ -447,9 +447,11 @@ class SupportTicketController(http.Controller):
                 ticket_access.append(contact.id)
 
         search_t = [('partner_id', 'in', ticket_access), ('partner_id','!=',False)]
-        
+        state = None
         if 'state' in values:
             search_t.append(('state_id', '=', int(values['state'])))
+            state = int(values['state'])
+
 
         support_tickets = request.env['website.support.ticket'].sudo().search(search_t)
 
@@ -458,7 +460,14 @@ class SupportTicketController(http.Controller):
 
         ticket_states = request.env['website.support.ticket.state'].sudo().search([])
 
-        return request.render('website_support.support_ticket_view_list', {'support_tickets':support_tickets,'ticket_count':len(support_tickets), 'change_requests': change_requests, 'request_count': len(change_requests), 'ticket_states': ticket_states})
+        return request.render('website_support.support_ticket_view_list', 
+            {
+                'support_tickets':support_tickets,
+                'ticket_count':len(support_tickets), 
+                'change_requests': change_requests, 
+                'request_count': len(change_requests), 
+                'ticket_states': ticket_states,
+                'state': state})
 
     @http.route('/support/ticket/view/<ticket>', type="http", auth="user", website=True)
     def support_ticket_view(self, ticket):
